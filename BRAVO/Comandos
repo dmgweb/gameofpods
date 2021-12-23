@@ -1,0 +1,6 @@
+Comandos
+
+ssh node01
+mkdir  /drupal-data 
+mkdir /drupal-mysql-data
+

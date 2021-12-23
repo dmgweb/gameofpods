@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: drupal-mysql-pv
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 5Gi
+  claimRef:
+    name: drupal-mysql-pvc
+    namespace: default
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/drupal-mysql-data"
