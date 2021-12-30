@@ -4,3 +4,4 @@ ssh node01
 mkdir  /drupal-data 
 mkdir /drupal-mysql-data
 
+for i in $(seq 2 6); do sed -i 's/redis0[1-5]/redis0'$i'/' pv1.yml; kubectl apply -f pv1.yml; done
