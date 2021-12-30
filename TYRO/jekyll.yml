@@ -6,18 +6,18 @@ metadata:
     run: jekyll
 spec:
   containers:
-    - image: kodekloud/jekyll-serve 
-      name: jekyll
-      volumeMounts:
-      - name: site
-        mountPath: /site
-    initContainers:
-      - name: copy-jekyll-site
-        image: kodekloud/jekyll
-        command: ["jekyll", "new", "/site"]
-        volumeMounts:
-        - name: site
-          mountPath: /site
+  - image: kodekloud/jekyll-serve 
+    name: jekyll
+    volumeMounts:
+    - name: site
+      mountPath: /site
+  initContainers:
+  - name: copy-jekyll-site
+    image: kodekloud/jekyll
+    command: ["jekyll", "new", "/site"]
+    volumeMounts:
+    - name: site
+      mountPath: /site
   volumes:
    - name: site
      persistentVolumeClaim:
