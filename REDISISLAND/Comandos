@@ -1,0 +1,10 @@
+
+ssh node01
+mkdir /redis01
+mkdir /redis02
+mkdir /redis03
+mkdir /redis04
+mkdir /redis05
+mkdir /redis06
+
+for i in $(seq 1 6); do sed -i 's/redis0[1-5]/redis0'$i'/' pv1.yml; kubectl apply -f pv1.yml; done

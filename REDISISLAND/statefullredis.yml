@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-cluster
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  serviceName: "redis"
+  replicas: 6
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:5.0.1-alpine
+        command: ["/conf/update-node.sh", "redis-server", "/conf/redis.conf"] 
+        ports:
+        - name: client
+          containerPort: 6379
+        - name: gossip
+          containerPort: 16379
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+        - name: conf
+          mountPath: /conf
+        - name: data
+          mountPath: /data
+          readOnly: false    
+      volumes:
+      - name: conf
+        configMap:
+          name: redis-cluster-configmap # el nombre del configmap que queremos montar
+          defaultMode: 0755
+          items: # Un arreglo de keys del configmap para crear como archivos
+          - key: "redis.conf"
+            path: "redis.conf"
+          - key: "update-node.sh"
+            path: "update-node.sh"   
+          
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: ""
+      resources:
+        requests:
+          storage: 1Gi
